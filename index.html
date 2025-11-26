@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login — Simple Interface</title>
+
+  <!-- ✅ LINK YOUR CSS FILE HERE -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container">
+    <main class="card" role="main" aria-labelledby="loginHeading">
+      <h1 id="loginHeading">Welcome back</h1>
+      <p class="lead">Sign in to access your account</p>
+
+      <form id="loginForm" novalidate>
+        <div>
+          <label for="email">Email</label>
+          <div class="input-group">
+            <input id="email" name="email" type="email" placeholder="you@example.com" required />
+          </div>
+          <div id="emailError" class="error" style="display:none"></div>
+        </div>
+
+        <div>
+          <label for="password">Password</label>
+          <div class="input-group">
+            <input id="password" name="password" type="password" placeholder="Enter your password" required minlength="6" />
+            <button type="button" id="togglePwd" style="background:none;border:none;cursor:pointer;font-size:13px;padding:6px;">
+              Show
+            </button>
+          </div>
+          <div id="pwdError" class="error" style="display:none"></div>
+        </div>
+
+        <div class="actions">
+          <label class="checkbox">
+            <input type="checkbox" id="remember" />
+            <span>Remember me</span>
+          </label>
+          <a href="#" id="forgot">Forgot?</a>
+        </div>
+
+        <button type="submit" class="primary" id="submitBtn">Sign in</button>
+
+        <div class="helper">
+          New here? <a href="#" id="signup">Create an account</a>
+        </div>
+      </form>
+
+      <p class="footer">This demo is client-side only — replace with real auth later.</p>
+    </main>
+  </div>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
+    const pwdInput = document.getElementById('password');
+    const emailError = document.getElementById('emailError');
+    const pwdError = document.getElementById('pwdError');
+    const toggleBtn = document.getElementById('togglePwd');
+    const submitBtn = document.getElementById('submitBtn');
+
+    function validateEmail(value) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      const isPwd = pwdInput.type === 'password';
+      pwdInput.type = isPwd ? 'text' : 'password';
+      toggleBtn.textContent = isPwd ? 'Hide' : 'Show';
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let ok = true;
+
+      emailError.style.display = 'none';
+      pwdError.style.display = 'none';
+
+      if (!emailInput.value.trim()) {
+        emailError.textContent = 'Email is required.';
+        emailError.style.display = 'block';
+        ok = false;
+      } else if (!validateEmail(emailInput.value)) {
+        emailError.textContent = 'Invalid email format.';
+        emailError.style.display = 'block';
+        ok = false;
+      }
+
+      if (!pwdInput.value) {
+        pwdError.textContent = 'Password is required.';
+        pwdError.style.display = 'block';
+        ok = false;
+      } else if (pwdInput.value.length < 6) {
+        pwdError.textContent = 'Password must be at least 6 characters.';
+        pwdError.style.display = 'block';
+        ok = false;
+      }
+
+      if (!ok) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Signing in...';
+
+      setTimeout(() => {
+        alert('Login successful (demo)');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Sign in';
+        form.reset();
+        pwdInput.type = 'password';
+        toggleBtn.textContent = 'Show';
+      }, 900);
+    });
+  </script>
+
+</body>
+</html>
